@@ -44,7 +44,7 @@ type Done func(error, ...interface{})
   Routine functions are the main functions that will be called when
   running through the Routines array.
 
-  It should accept an Done function as its first argument, and all
+  It should accept a Done function as its first argument, and all
   other arguments will be passed into the Routine function.
 
   Every Routine function must call its Done function. The Done
