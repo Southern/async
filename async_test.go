@@ -206,3 +206,50 @@ func TestClearParallel(t *testing.T) {
     t.Errorf("Unknown error: %+v", err)
   })
 }
+
+func ExampleParallel() {
+  Parallel([]Routine{
+    func(done Done, args ...interface{}) {
+      time.Sleep(time.Second)
+      done(nil, "arg1", "arg2", "arg3")
+    },
+
+    func(done Done, args ...interface{}) {
+      done(nil, "arg4", "arg5", "arg6")
+    },
+  }, func(err error, results ...interface{}) {
+    if err != nil {
+      fmt.Errorf("Error: %+v\n", err)
+      return
+    }
+
+    fmt.Printf("Results: %+v\n", results)
+  })
+
+  // Output:
+  // Results: [arg4 arg5 arg6 arg1 arg2 arg3]
+}
+
+func ExampleWaterfall() {
+  Waterfall([]Routine{
+    func(done Done, args ...interface{}) {
+      time.Sleep(time.Second)
+      done(nil, "arg1", "arg2", "arg3")
+    },
+
+    func(done Done, args ...interface{}) {
+      time.Sleep(time.Second)
+      done(nil, "arg4", "arg5", "arg6")
+    },
+  }, func(err error, results ...interface{}) {
+    if err != nil {
+      fmt.Errorf("Error: %+v\n", err)
+      return
+    }
+
+    fmt.Printf("Results: %+v\n", results)
+  })
+
+  // Output:
+  // Results: [arg4 arg5 arg6]
+}
