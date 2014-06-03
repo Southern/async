@@ -1,7 +1,7 @@
 package mapper
 
 import (
-  "github.com/Southern/async"
+  "git.aviuslabs.net/golang/async"
   "reflect"
 )
 

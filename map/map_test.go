@@ -2,7 +2,7 @@ package mapper
 
 import (
   "fmt"
-  "github.com/Southern/async"
+  "git.aviuslabs.net/golang/async"
   "testing"
 )
 
