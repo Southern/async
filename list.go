@@ -2,7 +2,6 @@ package async
 
 import (
   "container/list"
-  // "fmt"
   "sync"
 )
 
