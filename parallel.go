@@ -4,8 +4,6 @@ func Parallel(routines []Routine, callbacks ...Done) {
   l := New()
   l.Multiple(routines...)
 
-  l.Wait.Add(l.Len())
-
   l.RunParallel(callbacks...)
 }
 
@@ -27,6 +25,8 @@ func (l *List) RunParallel(callbacks ...Done) {
       }
     }
   )
+
+  l.Wait.Add(l.Len())
 
   go func() {
     for {

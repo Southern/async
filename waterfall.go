@@ -4,14 +4,14 @@ func Waterfall(routines []Routine, callbacks ...Done) {
   l := New()
   l.Multiple(routines...)
 
-  l.Wait.Add(l.Len())
-
   l.RunWaterfall(callbacks...)
 }
 
 func (l *List) RunWaterfall(callbacks ...Done) {
   fall := fall(l, callbacks...)
   next := next(l, callbacks...)
+
+  l.Wait.Add(l.Len())
 
   fall(next)
 }
