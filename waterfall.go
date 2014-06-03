@@ -23,7 +23,7 @@ func fall(l *List, callbacks ...Done) func(Done, ...interface{}) {
 
     // Run the first waterfall routine and give it the next function, and
     // any arguments that were provided
-    r(next, args...)
+    go r(next, args...)
     l.Wait.Wait()
   }
 }
