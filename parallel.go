@@ -67,6 +67,8 @@ func (l *List) RunParallel(callbacks ...Done) {
 
   l.Wait.Wait()
 
+  close(result)
+
   if _error == nil {
     final(nil, results...)
   }
