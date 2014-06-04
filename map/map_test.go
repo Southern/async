@@ -30,18 +30,16 @@ func TestMapString(t *testing.T) {
 }
 
 func TestMapInt(t *testing.T) {
-  ints := []int{
-    1, 2, 3, 4, 5,
-  }
+  ints := []int{1, 2, 3, 4, 5}
 
   mapper := func(done async.Done, args ...interface{}) {
-    println("Hit bool")
+    println("Hit int")
     fmt.Printf("Args: %+v\n", args)
     done(nil, args...)
   }
 
   final := func(err error, results ...interface{}) {
-    println("Hit string end")
+    println("Hit int end")
     fmt.Printf("Results: %+v\n", results)
   }
 
@@ -49,9 +47,7 @@ func TestMapInt(t *testing.T) {
 }
 
 func TestMapBool(t *testing.T) {
-  bools := []bool{
-    true, false, false, true, false,
-  }
+  bools := []bool{true, false, false, true, false}
 
   mapper := func(done async.Done, args ...interface{}) {
     println("Hit bool")
@@ -60,7 +56,7 @@ func TestMapBool(t *testing.T) {
   }
 
   final := func(err error, results ...interface{}) {
-    println("Hit string end")
+    println("Hit bool end")
     fmt.Printf("Results: %+v\n", results)
   }
 
