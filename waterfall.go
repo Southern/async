@@ -1,7 +1,5 @@
 package async
 
-// import "fmt"
-
 func Waterfall(routines []Routine, callbacks ...Done) {
   l := New()
   l.Multiple(routines...)
