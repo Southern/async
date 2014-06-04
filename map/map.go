@@ -5,7 +5,7 @@ import (
   "reflect"
 )
 
-func Map(data interface{}, routine async.Routine, callbacks ...async.Done) error {
+func Map(data interface{}, routine async.Routine, callbacks ...async.Done) {
   var (
     routines []async.Routine
     results  []interface{}
@@ -32,6 +32,4 @@ func Map(data interface{}, routine async.Routine, callbacks ...async.Done) error
   }
 
   async.Waterfall(routines, callbacks...)
-
-  return nil
 }
