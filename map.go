@@ -57,7 +57,7 @@ func Map(data interface{}, routine Routine, callbacks ...Done) {
         done = func(original Done) Done {
           return func(err error, args ...interface{}) {
             results = append(results, args...)
-            if i == d.Len() {
+            if id == (d.Len() - 1) {
               original(err, results...)
               return
             }

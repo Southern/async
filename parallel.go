@@ -71,6 +71,10 @@ func (l *List) RunParallel(callbacks ...Done) {
     for {
       r := <-result
 
+      if _error != nil {
+        continue
+      }
+
       switch r.(type) {
       case error:
         _error = r.(error)
@@ -88,10 +92,6 @@ func (l *List) RunParallel(callbacks ...Done) {
 
     go func() {
       r(func(err error, args ...interface{}) {
-        if _error != nil {
-          return
-        }
-
         if err != nil {
           result <- err
           return
