@@ -1,8 +1,7 @@
-package filter
+package async
 
 import (
   "fmt"
-  "git.aviuslabs.net/golang/async"
   "testing"
 )
 
@@ -15,7 +14,7 @@ func TestFilter(t *testing.T) {
     "test5",
   }
 
-  mapper := func(done async.Done, args ...interface{}) {
+  mapper := func(done Done, args ...interface{}) {
     println("Hit string")
     fmt.Printf("Args: %+v\n", args)
     if args[0] == "test3" {

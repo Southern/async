@@ -1,8 +1,7 @@
-package mapper
+package async
 
 import (
   "fmt"
-  "git.aviuslabs.net/golang/async"
   "testing"
 )
 
@@ -15,7 +14,7 @@ func TestMapString(t *testing.T) {
     "test5",
   }
 
-  mapper := func(done async.Done, args ...interface{}) {
+  mapper := func(done Done, args ...interface{}) {
     println("Hit string")
     fmt.Printf("Args: %+v\n", args)
     done(nil, args...)
@@ -32,7 +31,7 @@ func TestMapString(t *testing.T) {
 func TestMapInt(t *testing.T) {
   ints := []int{1, 2, 3, 4, 5}
 
-  mapper := func(done async.Done, args ...interface{}) {
+  mapper := func(done Done, args ...interface{}) {
     println("Hit int")
     fmt.Printf("Args: %+v\n", args)
     done(nil, args...)
@@ -49,7 +48,7 @@ func TestMapInt(t *testing.T) {
 func TestMapBool(t *testing.T) {
   bools := []bool{true, false, false, true, false}
 
-  mapper := func(done async.Done, args ...interface{}) {
+  mapper := func(done Done, args ...interface{}) {
     println("Hit bool")
     fmt.Printf("Args: %+v\n", args)
     done(nil, args...)
