@@ -28,9 +28,6 @@ func TestParallel(t *testing.T) {
       done(nil, "arg7", "arg8", "arg9")
     },
   }, func(err error, results ...interface{}) {
-    Status("Parallel err: %+v", err)
-    Status("Parallel results: %+v", results)
-
     if err != nil {
       t.Errorf("Parallel threw an unexpected error: %+v", err)
       return

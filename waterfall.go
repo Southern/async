@@ -1,5 +1,9 @@
 package async
 
+/*
+  Shorthand to List.RunWaterfall without having to manually create a new list,
+  add the routines, etc.
+*/
 func Waterfall(routines []Routine, callbacks ...Done) {
   l := New()
   l.Multiple(routines...)
@@ -7,6 +11,16 @@ func Waterfall(routines []Routine, callbacks ...Done) {
   l.RunWaterfall(callbacks...)
 }
 
+/*
+  Run all of the Routine functions in a waterfall effect.
+
+  The arguments of the previous Routine function will be passed into the next
+  Routine function. The final result provided to the callbacks will be the
+  result of the last Routine function.
+
+  If there is an error, waterfall will immediately exit and trigger the
+  callbacks with the error.
+*/
 func (l *List) RunWaterfall(callbacks ...Done) {
   fall := fall(l, callbacks...)
   next := next(l, callbacks...)
