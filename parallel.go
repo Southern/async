@@ -27,7 +27,7 @@ func Parallel(routines []Routine, callbacks ...Done) {
     Parallel([]Routine{
       func(done Done, args ...interface{}) {
         time.Sleep(20 * time.Second)
-        done(nil, "I work")
+        done(nil, "Won't trigger the callbacks because error has been sent")
       },
       func(done Done, args ...interface{}) {
         done(fmt.Errorf("Test error"))
