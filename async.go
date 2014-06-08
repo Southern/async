@@ -1,5 +1,5 @@
 /*
-  Simplistic ansynchronous routines for the masses.
+  Simplistic asynchronous routines for the masses.
 */
 package async
 
