@@ -1,6 +1,6 @@
 # async
 
-[![Build Status](https://drone.io/github.com/Southern/async/status.png)](https://drone.io/github.com/Southern/async/latest) [![Coverage Status](https://coveralls.io/repos/Southern/async/badge.png?branch=master)](https://coveralls.io/r/Southern/async?branch=master)
+[![Build Status](https://travis-ci.org/Southern/async.svg?branch=master)](https://travis-ci.org/Southern/async) [![Coverage Status](https://coveralls.io/repos/Southern/async/badge.png?branch=master)](https://coveralls.io/r/Southern/async?branch=master)
 
 Simplistic asynchronous Go routines for the masses.
 
