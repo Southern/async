@@ -1,6 +1,9 @@
 language: go
 go:
-  -tip
+  - 1.0
+  - 1.1
+  - 1.2
+  - tip
 install:
   - go get code.google.com/p/go.tools/cmd/cover
   - go get github.com/mattn/goveralls
