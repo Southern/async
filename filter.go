@@ -75,7 +75,6 @@ func Filter(data interface{}, routine Routine, callbacks ...Done) {
       return func(done Done, args ...interface{}) {
         done = func(original Done) Done {
           return func(err error, args ...interface{}) {
-
             if args[0] != false {
               results = append(results, v)
             }
@@ -167,7 +166,9 @@ func FilterParallel(data interface{}, routine Routine, callbacks ...Done) {
           return func(err error, args ...interface{}) {
             if args[0] != false {
               original(err, v)
+              return
             }
+            original(err)
           }
         }(done)
 
