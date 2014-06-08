@@ -139,12 +139,6 @@ func MapParallel(data interface{}, routine Routine, callbacks ...Done) {
     v := d.Index(i).Interface()
     routines = append(routines, func(id int) Routine {
       return func(done Done, args ...interface{}) {
-        done = func(original Done) Done {
-          return func(err error, args ...interface{}) {
-            original(err, args...)
-          }
-        }(done)
-
         routine(done, v, id)
       }
     }(i))
