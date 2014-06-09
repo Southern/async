@@ -4,7 +4,8 @@
 
 Simplistic asynchronous Go routines for the masses.
 
-[Documentation](https://godoc.org/github.com/Southern/async)
+[Documentation](https://godoc.org/github.com/Southern/async)  
+[Sourcegraph](https://sourcegraph.com/github.com/Southern/async)
 
 ## License
 Copyright (c) 2014 Colton Baker
