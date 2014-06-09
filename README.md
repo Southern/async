@@ -1,6 +1,6 @@
 # async
 
-[![Build Status](https://travis-ci.org/Southern/async.svg?branch=master)](https://travis-ci.org/Southern/async) [![Coverage Status](https://coveralls.io/repos/Southern/async/badge.png?branch=master)](https://coveralls.io/r/Southern/async?branch=master)
+[![Build Status](https://travis-ci.org/Southern/async.svg?branch=master)](https://travis-ci.org/Southern/async) [![Coverage Status](https://coveralls.io/repos/Southern/async/badge.png?branch=master)](https://coveralls.io/r/Southern/async?branch=master) [![Total views](https://sourcegraph.com/api/repos/github.com/Southern/async/counters/views.png?no-count=1)](https://sourcegraph.com/github.com/Southern/async) [![Views in the last 24 hours](https://sourcegraph.com/api/repos/github.com/Southern/async/counters/views-24h.png)](https://sourcegraph.com/github.com/Southern/async) [![authors](https://sourcegraph.com/api/repos/github.com/Southern/async/badges/authors.png)](https://sourcegraph.com/github.com/Southern/async)
 
 Simplistic asynchronous Go routines for the masses.
 
