@@ -9,7 +9,7 @@ import (
 
   Used to contain the Routine functions to be processed
 
-  This list inherits http://golang.org/pkg/container/list/ and contains all
+  This list inherits https://godoc.org/container/list and contains all
   of the functionality that it contains, with a minor tweak to Remove. Instead
   of Remove returning the element, it returns our routine. This is used to
   ensure that our Routine is removed from the list before it's ran, and
