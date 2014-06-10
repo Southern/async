@@ -1,13 +1,16 @@
-package async
+package async_test
 
-import "testing"
+import (
+  "github.com/Southern/async"
+  "testing"
+)
 
 func TestAdd(t *testing.T) {
   Status("Creating list")
-  list := New()
+  list := async.New()
 
   Status("Adding routine")
-  list.Add(func(done Done, args ...interface{}) {
+  list.Add(func(done async.Done, args ...interface{}) {
     Status("Args: %+v", args)
   })
 
@@ -18,12 +21,12 @@ func TestAdd(t *testing.T) {
 
 func TestMultiple(t *testing.T) {
   Status("Creating list")
-  list := New()
+  list := async.New()
 
   Status("Adding multiple routines")
-  list, _ = list.Multiple(func(done Done, args ...interface{}) {
+  list, _ = list.Multiple(func(done async.Done, args ...interface{}) {
     Status("Args: %+v", args)
-  }, func(done Done, args ...interface{}) {
+  }, func(done async.Done, args ...interface{}) {
     Status("Args2: %+v", args)
   })
 
@@ -34,10 +37,10 @@ func TestMultiple(t *testing.T) {
 
 func TestRemove(t *testing.T) {
   Status("Creating list")
-  list := New()
+  list := async.New()
 
   Status("Adding routine")
-  list, elem := list.Add(func(done Done, args ...interface{}) {
+  list, elem := list.Add(func(done async.Done, args ...interface{}) {
     Status("Args: %+v", args)
   })
 

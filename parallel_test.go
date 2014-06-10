@@ -1,28 +1,29 @@
-package async
+package async_test
 
 import (
   "fmt"
+  "github.com/Southern/async"
   "testing"
   "time"
 )
 
 func TestParallel(t *testing.T) {
   Status("Calling parallel")
-  Parallel([]Routine{
-    func(done Done, args ...interface{}) {
+  async.Parallel([]async.Routine{
+    func(done async.Done, args ...interface{}) {
       Status("First parallel function")
       Status("Called with arguments: %+v", args)
       done(nil, "arg1", "arg2", "arg3")
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       Status("Second parallel function")
       Status("Called with arguments: %+v", args)
       time.Sleep(time.Second)
       done(nil, "arg4", "arg5", "arg6")
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       Status("Third parallel function")
       Status("Called with arguments: %+v", args)
       done(nil, "arg7", "arg8", "arg9")
@@ -39,21 +40,21 @@ func TestParallel(t *testing.T) {
 
 func TestParallelError(t *testing.T) {
   Status("Calling Parallel")
-  Parallel([]Routine{
-    func(done Done, args ...interface{}) {
+  async.Parallel([]async.Routine{
+    func(done async.Done, args ...interface{}) {
       Status("First parallel function")
       Status("Called with arguments: %+v", args)
       done(nil, "arg1", "arg2", "arg3")
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       Status("Second parallel function")
       Status("Called with arguments: %+v", args)
       time.Sleep(time.Second)
       done(fmt.Errorf("Test error"))
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       Status("Third parallel function")
       Status("Called with arguments: %+v", args)
       done(nil, "arg4", "arg5", "arg6")

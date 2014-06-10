@@ -1,4 +1,4 @@
-package async
+package async_test
 
 import (
   "fmt"

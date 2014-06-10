@@ -1,6 +1,9 @@
-package async
+package async_test
 
-import "testing"
+import (
+  "github.com/Southern/async"
+  "testing"
+)
 
 func TestFilterString(t *testing.T) {
   str := []string{
@@ -18,7 +21,7 @@ func TestFilterString(t *testing.T) {
     "test5",
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit string")
     Status("Args: %+v\n", args)
     if args[0] == "test3" {
@@ -39,7 +42,7 @@ func TestFilterString(t *testing.T) {
     }
   }
 
-  Filter(str, mapper, final)
+  async.Filter(str, mapper, final)
 }
 
 func TestFilterBool(t *testing.T) {
@@ -58,7 +61,7 @@ func TestFilterBool(t *testing.T) {
     false,
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit bool")
     Status("Args: %+v\n", args)
     if args[1] == 2 {
@@ -79,7 +82,7 @@ func TestFilterBool(t *testing.T) {
     }
   }
 
-  Filter(bools, mapper, final)
+  async.Filter(bools, mapper, final)
 }
 
 func TestFilterInt(t *testing.T) {
@@ -98,7 +101,7 @@ func TestFilterInt(t *testing.T) {
     5,
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit bool")
     Status("Args: %+v\n", args)
     if args[0] == 3 {
@@ -119,7 +122,7 @@ func TestFilterInt(t *testing.T) {
     }
   }
 
-  Filter(bools, mapper, final)
+  async.Filter(bools, mapper, final)
 }
 
 func TestFilterStringParallel(t *testing.T) {
@@ -138,7 +141,7 @@ func TestFilterStringParallel(t *testing.T) {
     "test5",
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit string")
     Status("Args: %+v\n", args)
     if args[0] == "test3" {
@@ -159,7 +162,7 @@ func TestFilterStringParallel(t *testing.T) {
     }
   }
 
-  FilterParallel(str, mapper, final)
+  async.FilterParallel(str, mapper, final)
 }
 
 func TestFilterBoolParallel(t *testing.T) {
@@ -178,7 +181,7 @@ func TestFilterBoolParallel(t *testing.T) {
     false,
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit bool")
     Status("Args: %+v\n", args)
     if args[1] == 2 {
@@ -199,7 +202,7 @@ func TestFilterBoolParallel(t *testing.T) {
     }
   }
 
-  FilterParallel(bools, mapper, final)
+  async.FilterParallel(bools, mapper, final)
 }
 
 func TestFilterIntParallel(t *testing.T) {
@@ -218,7 +221,7 @@ func TestFilterIntParallel(t *testing.T) {
     5,
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit bool")
     Status("Args: %+v\n", args)
     if args[0] == 3 {
@@ -239,5 +242,5 @@ func TestFilterIntParallel(t *testing.T) {
     }
   }
 
-  FilterParallel(bools, mapper, final)
+  async.FilterParallel(bools, mapper, final)
 }

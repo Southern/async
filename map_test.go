@@ -1,6 +1,9 @@
-package async
+package async_test
 
-import "testing"
+import (
+  "github.com/Southern/async"
+  "testing"
+)
 
 func TestMapString(t *testing.T) {
   str := []string{
@@ -19,7 +22,7 @@ func TestMapString(t *testing.T) {
     "test5",
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit string")
     Status("Args: %+v\n", args)
     if args[1] == 0 {
@@ -40,7 +43,7 @@ func TestMapString(t *testing.T) {
     }
   }
 
-  Map(str, mapper, final)
+  async.Map(str, mapper, final)
 }
 
 func TestMapInt(t *testing.T) {
@@ -48,7 +51,7 @@ func TestMapInt(t *testing.T) {
 
   expects := []int{2, 4, 6, 8, 10}
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit int")
     Status("Args: %+v\n", args)
     done(nil, args[0].(int)*2)
@@ -65,7 +68,7 @@ func TestMapInt(t *testing.T) {
     }
   }
 
-  Map(ints, mapper, final)
+  async.Map(ints, mapper, final)
 }
 
 func TestMapBool(t *testing.T) {
@@ -73,7 +76,7 @@ func TestMapBool(t *testing.T) {
 
   expects := []bool{true, true, false, true, false}
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit bool")
     Status("Args: %+v\n", args)
     if args[1] == 1 {
@@ -94,7 +97,7 @@ func TestMapBool(t *testing.T) {
     }
   }
 
-  Map(bools, mapper, final)
+  async.Map(bools, mapper, final)
 }
 
 func TestMapStringParallel(t *testing.T) {
@@ -114,7 +117,7 @@ func TestMapStringParallel(t *testing.T) {
     "test5",
   }
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit string")
     Status("Args: %+v\n", args)
     if args[1] == 0 {
@@ -135,7 +138,7 @@ func TestMapStringParallel(t *testing.T) {
     }
   }
 
-  MapParallel(str, mapper, final)
+  async.MapParallel(str, mapper, final)
 }
 
 func TestMapIntParallel(t *testing.T) {
@@ -143,7 +146,7 @@ func TestMapIntParallel(t *testing.T) {
 
   expects := []int{2, 4, 6, 8, 10}
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit int")
     Status("Args: %+v\n", args)
     done(nil, args[0].(int)*2)
@@ -160,7 +163,7 @@ func TestMapIntParallel(t *testing.T) {
     }
   }
 
-  MapParallel(ints, mapper, final)
+  async.MapParallel(ints, mapper, final)
 }
 
 func TestMapBoolParallel(t *testing.T) {
@@ -168,7 +171,7 @@ func TestMapBoolParallel(t *testing.T) {
 
   expects := []bool{true, true, false, true, false}
 
-  mapper := func(done Done, args ...interface{}) {
+  mapper := func(done async.Done, args ...interface{}) {
     Status("Hit bool")
     Status("Args: %+v\n", args)
     if args[1] == 1 {
@@ -189,5 +192,5 @@ func TestMapBoolParallel(t *testing.T) {
     }
   }
 
-  MapParallel(bools, mapper, final)
+  async.MapParallel(bools, mapper, final)
 }

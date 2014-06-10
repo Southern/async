@@ -1,29 +1,30 @@
-package async
+package async_test
 
 import (
   "fmt"
+  "github.com/Southern/async"
   "testing"
   "time"
 )
 
 func TestWaterfall(t *testing.T) {
   Status("Calling Waterfall")
-  Waterfall([]Routine{
-    func(done Done, args ...interface{}) {
+  async.Waterfall([]async.Routine{
+    func(done async.Done, args ...interface{}) {
       Status("First waterfall function")
       Status("Called with arguments: %+v", args)
       time.Sleep(time.Second)
       done(nil, "arg1", "arg2", "arg3")
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       Status("Second waterfall function")
       Status("Called with arguments: %+v", args)
       time.Sleep(time.Second)
       done(nil, "arg4", "arg5", "arg6")
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       Status("Third waterfall function")
       Status("Called with arguments: %+v", args)
       time.Sleep(time.Second)
@@ -41,22 +42,22 @@ func TestWaterfall(t *testing.T) {
 
 func TestWaterfallError(t *testing.T) {
   Status("Calling Waterfall")
-  Waterfall([]Routine{
-    func(done Done, args ...interface{}) {
+  async.Waterfall([]async.Routine{
+    func(done async.Done, args ...interface{}) {
       Status("First waterfall function")
       Status("Called with arguments: %+v", args)
       time.Sleep(time.Second)
       done(nil, "arg1", "arg2", "arg3")
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       Status("Second waterfall function")
       Status("Called with arguments: %+v", args)
       time.Sleep(time.Second)
       done(fmt.Errorf("Test error"))
     },
 
-    func(done Done, args ...interface{}) {
+    func(done async.Done, args ...interface{}) {
       t.Errorf("The second waterfall function did not stop when it errored.")
     },
   }, func(err error, results ...interface{}) {
