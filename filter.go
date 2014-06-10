@@ -30,16 +30,13 @@ import (
         "test5",
       }
 
-      mapper := func(done Done, args ...interface{}) {
+      mapper := func(done async.Done, args ...interface{}) {
         Status("Hit string")
         Status("Args: %+v\n", args)
         if args[0] == "test3" {
-          // We don't want this result in our return, so we send false back
-          // as the first argument.
           done(nil, false)
           return
         }
-        // We want anything else that we get, so we return true here.
         done(nil, true)
       }
 
@@ -54,7 +51,7 @@ import (
         }
       }
 
-      Filter(str, mapper, final)
+      async.Filter(str, mapper, final)
     }
 
   Each Routine function will be passed the current value and its index the
@@ -120,7 +117,7 @@ func Filter(data interface{}, routine Routine, callbacks ...Done) {
         "test5",
       }
 
-      mapper := func(done Done, args ...interface{}) {
+      mapper := func(done async.Done, args ...interface{}) {
         Status("Hit string")
         Status("Args: %+v\n", args)
         if args[0] == "test3" {
@@ -141,7 +138,7 @@ func Filter(data interface{}, routine Routine, callbacks ...Done) {
         }
       }
 
-      FilterParallel(str, mapper, final)
+      async.FilterParallel(str, mapper, final)
     }
 
   Each Routine function will be passed the current value and its index the

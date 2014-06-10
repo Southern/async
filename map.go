@@ -19,11 +19,9 @@ import (
 
       expects := []int{2, 4, 6, 8, 10}
 
-      mapper := func(done Done, args ...interface{}) {
+      mapper := func(done async.Done, args ...interface{}) {
         Status("Hit int")
         Status("Args: %+v\n", args)
-        // We know we want an int. So we can cast this to an integer, multiply by
-        // 2, and send it back as the result.
         done(nil, args[0].(int)*2)
       }
 
@@ -38,7 +36,7 @@ import (
         }
       }
 
-      Map(ints, mapper, final)
+      async.Map(ints, mapper, final)
     }
 
 */
@@ -100,7 +98,7 @@ func Map(data interface{}, routine Routine, callbacks ...Done) {
         "test5",
       }
 
-      mapper := func(done Done, args ...interface{}) {
+      mapper := func(done async.Done, args ...interface{}) {
         Status("Hit string")
         Status("Args: %+v\n", args)
         if args[1] == 0 {
@@ -121,7 +119,7 @@ func Map(data interface{}, routine Routine, callbacks ...Done) {
         }
       }
 
-      MapParallel(str, mapper, final)
+      async.MapParallel(str, mapper, final)
     }
 
   The output of mapping in Parallel mode cannot be guaranteed to stay in the

@@ -24,12 +24,12 @@ func Parallel(routines []Routine, callbacks ...Done) {
   to cancel a sleep timer in Go.
 
   For example:
-    Parallel([]Routine{
-      func(done Done, args ...interface{}) {
+    async.Parallel([]async.Routine{
+      func(done async.Done, args ...interface{}) {
         time.Sleep(20 * time.Second)
         done(nil, "Won't trigger the callbacks because error has been sent")
       },
-      func(done Done, args ...interface{}) {
+      func(done async.Done, args ...interface{}) {
         done(fmt.Errorf("Test error"))
       }
     }, func(err error, results ...interface{}) {
