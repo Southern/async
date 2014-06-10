@@ -77,7 +77,7 @@ func fallSeries(l *List, callbacks ...Done) func(Done, ...interface{}) {
     e := l.Front()
     _, r := l.Remove(e)
 
-    // Run the first waterfall routine and give it the next function, and
+    // Run the first series routine and give it the next function, and
     // any arguments that were provided
     go r(next)
     l.Wait.Wait()
@@ -105,7 +105,7 @@ func nextSeries(l *List, callbacks ...Done) Done {
       return
     }
 
-    // Run the next waterfall routine with any arguments that were provided
+    // Run the next series routine with any arguments that were provided
     fall(next)
     return
   }
