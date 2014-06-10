@@ -23,7 +23,7 @@ func Waterfall(routines []Routine, callbacks ...Done) {
 */
 func (l *List) RunWaterfall(callbacks ...Done) {
   fall := fall(l, callbacks...)
-  next := next(l, callbacks...)
+  next := nextWaterfall(l, callbacks...)
 
   l.Wait.Add(l.Len())
 
@@ -42,11 +42,11 @@ func fall(l *List, callbacks ...Done) func(Done, ...interface{}) {
   }
 }
 
-func next(l *List, callbacks ...Done) Done {
+func nextWaterfall(l *List, callbacks ...Done) Done {
   fall := fall(l, callbacks...)
 
   return func(err error, args ...interface{}) {
-    next := next(l, callbacks...)
+    next := nextWaterfall(l, callbacks...)
 
     l.Wait.Done()
     if err != nil || l.Len() == 0 {
