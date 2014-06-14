@@ -76,9 +76,14 @@ func Map(data interface{}, routine Routine, callbacks ...Done) {
   Manipulate data in a slice in Parallel mode.
 
   Each Routine will be called with the value and index of the current position
-  in the slice. When calling the Done function, an error will cause the
-  mapping to immediately exit. All other arguments are sent back as the
-  replacement for the current value.
+  in the slice. When calling the Done function, arguments are sent
+  back as the replacement for the current value.
+
+  If there is an error, any further results will be discarded but it will not
+  immediately exit. It will continue to run all of the other Routine functions
+  that were passed into it. This is because by the time the error is sent, the
+  goroutines have already been started. At this current time, there is no way
+  to cancel a sleep timer in Go.
 
   For example, take a look at one of the tests for this function:
     func TestMapStringParallel(t *testing.T) {

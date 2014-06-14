@@ -17,10 +17,10 @@ func Parallel(routines []Routine, callbacks ...Done) {
   All of the arguments returned in a Routine's Done function will be combined
   and returned in the callbacks that are provided.
 
-  If there is an error, parallel will discard any further results but not
+  If there is an error, any further results will be discarded but it will not
   immediately exit. It will continue to run all of the other Routine functions
   that were passed into it. This is because by the time the error is sent, the
-  go routines have already been started. At this current time, there is no way
+  goroutines have already been started. At this current time, there is no way
   to cancel a sleep timer in Go.
 
   For example:

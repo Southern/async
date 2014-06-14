@@ -83,6 +83,61 @@ func (l *List) RunSeries(callbacks ...Done) {
   fall(next)
 }
 
+/*
+  Run all of the Routine functions in a parallel series effect.
+
+  If there is an error, any further results will be discarded but it will not
+  immediately exit. It will continue to run all of the other Routine functions
+  that were passed into it. This is because by the time the error is sent, the
+  goroutines have already been started. At this current time, there is no way
+  to cancel a sleep timer in Go.
+
+  There are no arguments passed between the routines that are used in series.
+  It is just for commands that need to run asynchronously without seeing the
+  results of its previous routine.
+
+  For example, take a look at one of the tests for this function:
+    func TestSeriesParallel(t *testing.T) {
+      counter := 0
+
+      Status("Calling Series")
+      async.SeriesParallel([]async.Routine{
+        func(done async.Done, args ...interface{}) {
+          Status("Increasing counter...")
+          counter++
+          done(nil)
+        },
+        func(done async.Done, args ...interface{}) {
+          Status("Increasing counter...")
+          counter++
+          done(nil)
+        },
+        func(done async.Done, args ...interface{}) {
+          Status("Increasing counter...")
+          counter++
+          done(nil)
+        },
+        func(done async.Done, args ...interface{}) {
+          Status("Increasing counter...")
+          counter++
+          done(nil)
+        },
+      }, func(err error, results ...interface{}) {
+        if err != nil {
+          t.Errorf("Unexpected error: %s", err)
+          return
+        }
+
+        if counter != 4 {
+          t.Errorf("Not all routines were completed.")
+          return
+        }
+
+        Status("Counter: %d", counter)
+      })
+    }
+
+*/
 func (l *List) RunSeriesParallel(callbacks ...Done) {
   routines := make([]Routine, 0)
 

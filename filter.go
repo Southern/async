@@ -97,8 +97,13 @@ func Filter(data interface{}, routine Routine, callbacks ...Done) {
 
   You must call the Done function with false as its first argument if you do
   not want the data to be present in the results. No other arguments will
-  affect the performance of this function. When calling the Done function,
-  an error will cause the filtering to immediately exit.
+  affect the performance of this function.
+
+  If there is an error, any further results will be discarded but it will not
+  immediately exit. It will continue to run all of the other Routine functions
+  that were passed into it. This is because by the time the error is sent, the
+  goroutines have already been started. At this current time, there is no way
+  to cancel a sleep timer in Go.
 
   For example, take a look at one of the tests for this function:
     func TestFilterStringParallel(t *testing.T) {
