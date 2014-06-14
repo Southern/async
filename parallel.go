@@ -90,18 +90,16 @@ func (l *List) RunParallel(callbacks ...Done) {
     e := l.Front()
     _, r := l.Remove(e)
 
-    go func() {
-      go r(func(err error, args ...interface{}) {
-        defer l.Wait.Done()
+    go r(func(err error, args ...interface{}) {
+      defer l.Wait.Done()
 
-        if err != nil {
-          result <- err
-          return
-        }
+      if err != nil {
+        result <- err
+        return
+      }
 
-        result <- args
-      })
-    }()
+      result <- args
+    })
   }
 
   l.Wait.Wait()
