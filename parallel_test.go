@@ -44,13 +44,13 @@ func TestParallelError(t *testing.T) {
     func(done async.Done, args ...interface{}) {
       Status("First parallel function")
       Status("Called with arguments: %+v", args)
+      time.Sleep(time.Second)
       done(nil, "arg1", "arg2", "arg3")
     },
 
     func(done async.Done, args ...interface{}) {
       Status("Second parallel function")
       Status("Called with arguments: %+v", args)
-      time.Sleep(time.Second)
       done(fmt.Errorf("Test error"))
     },
 
