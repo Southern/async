@@ -12,6 +12,17 @@ func Series(routines []Routine, callbacks ...Done) {
 }
 
 /*
+  Shorthand to List.RunSeries without having to manually create a new
+  list, add the routines, etc.
+*/
+func SeriesParallel(routines []Routine, callbacks ...Done) {
+  l := New()
+  l.Multiple(routines...)
+
+  l.RunSeriesParallel(callbacks...)
+}
+
+/*
   Run all of the Routine functions in a series effect.
 
   If there is an error, series will immediately exit and trigger the
@@ -70,6 +81,29 @@ func (l *List) RunSeries(callbacks ...Done) {
   l.Wait.Add(l.Len())
 
   fall(next)
+}
+
+func (l *List) RunSeriesParallel(callbacks ...Done) {
+  routines := make([]Routine, 0)
+
+  for l.Len() > 0 {
+    e := l.Front()
+    _, r := l.Remove(e)
+
+    routines = append(routines, func(routine Routine) Routine {
+      return func(done Done, args ...interface{}) {
+        r(func(err error, args ...interface{}) {
+          // As with our normal RunSeries, we do not want to handle any args
+          // that are returned. We only want to return if an error occurred.
+          done(err)
+        })
+      }
+    }(r))
+  }
+
+  l.Wait.Add(l.Len())
+
+  Parallel(routines, callbacks...)
 }
 
 func fallSeries(l *List, callbacks ...Done) func(Done, ...interface{}) {
