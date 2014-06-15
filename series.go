@@ -12,7 +12,7 @@ func Series(routines []Routine, callbacks ...Done) {
 }
 
 /*
-  Shorthand to List.RunSeries without having to manually create a new
+  Shorthand to List.RunSeriesParallel without having to manually create a new
   list, add the routines, etc.
 */
 func SeriesParallel(routines []Routine, callbacks ...Done) {
