@@ -14,7 +14,24 @@ func TestEventEmit(t *testing.T) {
   events.Emit("test")
 }
 
-func TestEventClear(t *testing.T) {
+func TestEventClearWithName(t *testing.T) {
+  Status("Add event")
+  events.On("test", func() {
+    Status("Called test")
+  }).On("test2", func() {
+    Status("Called test2")
+  })
+
+  Status("Clear list")
+  events.Clear("test")
+
+  if events.Get("test") != nil {
+    t.Errorf("Event was not properly removed.")
+    return
+  }
+}
+
+func TestEventClearNoName(t *testing.T) {
   Status("Add event")
   events.On("test", func() {
     Status("Called test")

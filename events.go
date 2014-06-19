@@ -52,12 +52,23 @@ type Events map[string]Event
 
 /*
 
-  Clear all events out of the event list.
+  Clear all events out of the event list. You can supply optional names for
+  the events to be cleared.
+
+  For instance:
+    events.On("test", func() {}).On("test2", func() {}).Emit("test").Clear("test")
 
   Returns the list of events for chaining commands.
 
 */
-func (e Events) Clear() Events {
+func (e Events) Clear(name ...string) Events {
+  if name != nil {
+    for i := 0; i < len(name); i++ {
+      delete(e, name[i])
+    }
+    return e
+  }
+
   for key := range e {
     delete(e, key)
   }
