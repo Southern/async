@@ -57,9 +57,10 @@ type Event map[reflect.Value]int
     events.On("myevent", func() {}, func (msg string) {})
 
   If you were to try this second example, and then try to .Emit("myevent",
-  "message") or .Emit("myevent"), you would get an error from reflect saying
-  that there is too many or not enough arguments for the first function that
-  is not accepting any arguments at all.
+  "message"), you would get an error from reflect saying that there is too
+  many arguments for the first function. If you were to try .Emit("myevent"),
+  you would get an error that there are not enough arguments because of the
+  second function expecting an argument.
 
 */
 type Events map[string]Event
