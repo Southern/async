@@ -176,8 +176,6 @@ func (e Events) Get(name string) Event {
   For instance:
     fmt.Printf("Length: %d", len(e["myevent"]))
 
-  Returns the list of events for chaining commands.
-
 */
 func (e Events) Length(name string) int {
   return len(e.Get(name))
