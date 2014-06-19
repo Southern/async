@@ -160,8 +160,6 @@ func (e Events) Emit(name string, args ...interface{}) Events {
   For instance:
     fmt.Printf("Events for myevent: %+v\n", e["myevent"])
 
-  Returns the list of events for chaining commands.
-
 */
 func (e Events) Get(name string) Event {
   return e[name]
