@@ -21,7 +21,7 @@ type Event map[reflect.Value]int
   All you need to do to create an event list is:
     events := make(async.Events)
 
-  All event commands can be chained together. For example:
+  All event commands that return Events can be chained together. For example:
     events.On("myevent", func() {
       println("Called myevent")
     }).On("myevent2", func(msg string) {
