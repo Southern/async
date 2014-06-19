@@ -47,6 +47,20 @@ type Event map[reflect.Value]int
       println("Called myevent")
     }).Emit("myevent")
 
+  When you are defining your event, all function calls within that event must
+  be in the same format.
+
+  For instance, this will work fine:
+    events.On("myevent", func() {}, func() {})
+
+  However, this will NOT work:
+    events.On("myevent", func() {}, func (msg string) {})
+
+  If you were to try this second example, and then try to .Emit("myevent",
+  "message") or .Emit("myevent"), you would get an error from reflect saying
+  that there is too many or not enough arguments for the first function that
+  is not accepting any arguments at all.
+
 */
 type Events map[string]Event
 
