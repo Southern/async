@@ -65,6 +65,8 @@ func (l *List) RunParallel(callbacks ...Done) {
     }
   )
 
+  defer close(result)
+
   l.Wait.Add(l.Len())
 
   go func() {
@@ -103,8 +105,6 @@ func (l *List) RunParallel(callbacks ...Done) {
   }
 
   l.Wait.Wait()
-
-  close(result)
 
   if _error == nil {
     final(nil, results...)
