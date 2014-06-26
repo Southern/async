@@ -1,8 +1,10 @@
 package async
 
 /*
-  Shorthand to List.RunSeries without having to manually create a new
-  list, add the routines, etc.
+
+Series is a shorthand function to List.RunSeries without having to manually
+create a new list, add the routines, etc.
+
 */
 func Series(routines []Routine, callbacks ...Done) {
   l := New()
@@ -12,8 +14,10 @@ func Series(routines []Routine, callbacks ...Done) {
 }
 
 /*
-  Shorthand to List.RunSeriesParallel without having to manually create a new
-  list, add the routines, etc.
+
+SeriesParallel is a shorthand function to List.RunSeriesParallel without
+having to manually create a new list, add the routines, etc.
+
 */
 func SeriesParallel(routines []Routine, callbacks ...Done) {
   l := New()
@@ -23,55 +27,56 @@ func SeriesParallel(routines []Routine, callbacks ...Done) {
 }
 
 /*
-  Run all of the Routine functions in a series effect.
 
-  If there is an error, series will immediately exit and trigger the
-  callbacks with the error.
+RunSeries will run all of the Routine functions in a series effect.
 
-  There are no arguments passed between the routines that are used in series.
-  It is just for commands that need to run asynchronously without seeing the
-  results of its previous routine.
+If there is an error, series will immediately exit and trigger the
+callbacks with the error.
 
-  For example, take a look at one of the tests for this function:
-    func TestSeries(t *testing.T) {
-      counter := 0
+There are no arguments passed between the routines that are used in series.
+It is just for commands that need to run asynchronously without seeing the
+results of its previous routine.
 
-      Status("Calling Series")
-      async.Series([]async.Routine{
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-      }, func(err error, results ...interface{}) {
-        if err != nil {
-          t.Errorf("Unexpected error: %s", err)
-          return
-        }
+For example, take a look at one of the tests for this function:
+  func TestSeries(t *testing.T) {
+    counter := 0
 
-        if counter != 4 {
-          t.Errorf("Not all routines were completed.")
-          return
-        }
+    Status("Calling Series")
+    async.Series([]async.Routine{
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+    }, func(err error, results ...interface{}) {
+      if err != nil {
+        t.Errorf("Unexpected error: %s", err)
+        return
+      }
 
-        Status("Counter: %d", counter)
-      })
-    }
+      if counter != 4 {
+        t.Errorf("Not all routines were completed.")
+        return
+      }
+
+      Status("Counter: %d", counter)
+    })
+  }
 
 */
 func (l *List) RunSeries(callbacks ...Done) {
@@ -84,62 +89,64 @@ func (l *List) RunSeries(callbacks ...Done) {
 }
 
 /*
-  Run all of the Routine functions in a parallel series effect.
 
-  If there is an error, any further results will be discarded but it will not
-  immediately exit. It will continue to run all of the other Routine functions
-  that were passed into it. This is because by the time the error is sent, the
-  goroutines have already been started. At this current time, there is no way
-  to cancel a sleep timer in Go.
+RunSeriesParallel all of the Routine functions in a series effect, and in
+parallel mode.
 
-  There are no arguments passed between the routines that are used in series.
-  It is just for commands that need to run asynchronously without seeing the
-  results of its previous routine.
+If there is an error, any further results will be discarded but it will not
+immediately exit. It will continue to run all of the other Routine functions
+that were passed into it. This is because by the time the error is sent, the
+goroutines have already been started. At this current time, there is no way
+to cancel a sleep timer in Go.
 
-  For example, take a look at one of the tests for this function:
-    func TestSeriesParallel(t *testing.T) {
-      counter := 0
+There are no arguments passed between the routines that are used in series.
+It is just for commands that need to run asynchronously without seeing the
+results of its previous routine.
 
-      Status("Calling Series")
-      async.SeriesParallel([]async.Routine{
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-        func(done async.Done, args ...interface{}) {
-          Status("Increasing counter...")
-          counter++
-          done(nil)
-        },
-      }, func(err error, results ...interface{}) {
-        if err != nil {
-          t.Errorf("Unexpected error: %s", err)
-          return
-        }
+For example, take a look at one of the tests for this function:
+  func TestSeriesParallel(t *testing.T) {
+    counter := 0
 
-        if counter != 4 {
-          t.Errorf("Not all routines were completed.")
-          return
-        }
+    Status("Calling Series")
+    async.SeriesParallel([]async.Routine{
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+      func(done async.Done, args ...interface{}) {
+        Status("Increasing counter...")
+        counter++
+        done(nil)
+      },
+    }, func(err error, results ...interface{}) {
+      if err != nil {
+        t.Errorf("Unexpected error: %s", err)
+        return
+      }
 
-        Status("Counter: %d", counter)
-      })
-    }
+      if counter != 4 {
+        t.Errorf("Not all routines were completed.")
+        return
+      }
+
+      Status("Counter: %d", counter)
+    })
+  }
 
 */
 func (l *List) RunSeriesParallel(callbacks ...Done) {
-  routines := make([]Routine, 0)
+  var routines []Routine
 
   for l.Len() > 0 {
     e := l.Front()

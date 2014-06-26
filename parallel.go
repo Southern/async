@@ -1,8 +1,10 @@
 package async
 
 /*
-  Shorthand to List.RunParallel without having to manually create a new
-  list, add the routines, etc.
+
+Parallel is shorthand function to List.RunParallel without having to manually
+create a new list, add the routines, etc.
+
 */
 func Parallel(routines []Routine, callbacks ...Done) {
   l := New()
@@ -12,39 +14,42 @@ func Parallel(routines []Routine, callbacks ...Done) {
 }
 
 /*
-  Run all of the Routine functions in parallel from the current list.
 
-  All of the arguments returned in a Routine's Done function will be combined
-  and returned in the callbacks that are provided.
+RunParallel will run all of the Routine functions from the current list in
+parallel mode.
 
-  If there is an error, any further results will be discarded but it will not
-  immediately exit. It will continue to run all of the other Routine functions
-  that were passed into it. This is because by the time the error is sent, the
-  goroutines have already been started. At this current time, there is no way
-  to cancel a sleep timer in Go.
+All of the arguments returned in a Routine's Done function will be combined
+and returned in the callbacks that are provided.
 
-  For example:
-    async.Parallel([]async.Routine{
-      func(done async.Done, args ...interface{}) {
-        time.Sleep(20 * time.Second)
-        done(nil, "Won't trigger the callbacks because error has been sent")
-      },
-      func(done async.Done, args ...interface{}) {
-        done(fmt.Errorf("Test error"))
-      }
-    }, func(err error, results ...interface{}) {
-      if err != nil {
-        fmt.Printf("Error: %s", err)
-        return
-      }
+If there is an error, any further results will be discarded but it will not
+immediately exit. It will continue to run all of the other Routine functions
+that were passed into it. This is because by the time the error is sent, the
+goroutines have already been started. At this current time, there is no way
+to cancel a sleep timer in Go.
 
-      fmt.Printf("Args: %s", args)
-    })
+For example:
+  async.Parallel([]async.Routine{
+    func(done async.Done, args ...interface{}) {
+      time.Sleep(20 * time.Second)
+      done(nil, "Won't trigger the callbacks because error has been sent")
+    },
+    func(done async.Done, args ...interface{}) {
+      done(fmt.Errorf("Test error"))
+    }
+  }, func(err error, results ...interface{}) {
+    if err != nil {
+      fmt.Printf("Error: %s", err)
+      return
+    }
 
-  If you were to run this example, you would see the error happen immediately.
-  However, you would also notice that the program doesn't immediately exit.
-  That is because it is still waiting for responses that it silently discards,
-  since an error has already occurred.
+    fmt.Printf("Args: %s", args)
+  })
+
+If you were to run this example, you would see the error happen immediately.
+However, you would also notice that the program doesn't immediately exit.
+That is because it is still waiting for responses that it silently discards,
+since an error has already occurred.
+
 */
 func (l *List) RunParallel(callbacks ...Done) {
   var (

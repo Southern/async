@@ -6,74 +6,74 @@ import (
 
 /*
 
-  Event is a map of functions to use for a single event. The integer is the
-  frequency of calls that the function should make.
+Event is a map of functions to use for a single event. The integer is the
+frequency of calls that the function should make.
 
 */
 type Event map[reflect.Value]int
 
 /*
 
-  List is used for containing everything related to the events. It stores the
-  name of the event, functions for the event, and number of times the function
-  should be called when the event is triggered.
+Events is a map that is used for containing everything related to the events.
+It stores the name of the event, functions for the event, and number of times
+the function should be called when the event is triggered.
 
-  All you need to do to create an event list is:
-    events := make(async.Events)
+All you need to do to create an event list is:
+  events := make(async.Events)
 
-  All event commands that return Events can be chained together. For example:
-    events.On("myevent", func() {
-      println("Called myevent")
-    }).On("myevent2", func(msg string) {
-      fmt.Printf("Called myevent2 with message: %s\n", msg)
-    }).Emit("myevent").Emit("myevent2", "Testing")
+All event commands that return Events can be chained together. For example:
+  events.On("myevent", func() {
+    println("Called myevent")
+  }).On("myevent2", func(msg string) {
+    fmt.Printf("Called myevent2 with message: %s\n", msg)
+  }).Emit("myevent").Emit("myevent2", "Testing")
 
-  You can return an error from a function and it will be emitted as an error
-  event. For example:
-    events.On("error", func(err error) {
-      fmt.Printf("Error: %s", err)
-    }).On("myevent", func() error {
-      return fmt.Errorf("Some error message")
-    }).Emit("myevent")
+You can return an error from a function and it will be emitted as an error
+event. For example:
+  events.On("error", func(err error) {
+    fmt.Printf("Error: %s", err)
+  }).On("myevent", func() error {
+    return fmt.Errorf("Some error message")
+  }).Emit("myevent")
 
 
-  It's also easily inheritable by other structures. For example:
-    type MyStruct struct {
-      async.Events
-    }
+It's also easily inheritable by other structures. For example:
+  type MyStruct struct {
+    async.Events
+  }
 
-    m := MyStruct{make(async.Events)}
-    m.On("myevent", func() {
-      println("Called myevent")
-    }).Emit("myevent")
+  m := MyStruct{make(async.Events)}
+  m.On("myevent", func() {
+    println("Called myevent")
+  }).Emit("myevent")
 
-  When you are defining your event, all function calls within that event must
-  be in the same format.
+When you are defining your event, all function calls within that event must
+be in the same format.
 
-  For instance, this will work fine:
-    events.On("myevent", func() {}, func() {})
+For instance, this will work fine:
+  events.On("myevent", func() {}, func() {})
 
-  However, this will NOT work:
-    events.On("myevent", func() {}, func (msg string) {})
+However, this will NOT work:
+  events.On("myevent", func() {}, func (msg string) {})
 
-  If you were to try this second example, and then try to .Emit("myevent",
-  "message"), you would get an error from reflect saying that there is too
-  many arguments for the first function. If you were to try .Emit("myevent"),
-  you would get an error that there are not enough arguments because of the
-  second function expecting an argument.
+If you were to try this second example, and then try to .Emit("myevent",
+"message"), you would get an error from reflect saying that there is too
+many arguments for the first function. If you were to try .Emit("myevent"),
+you would get an error that there are not enough arguments because of the
+second function expecting an argument.
 
 */
 type Events map[string]Event
 
 /*
 
-  Clear all events out of the event list. You can supply optional names for
-  the events to be cleared.
+Clear all events out of the event list. You can supply optional names for
+the events to be cleared.
 
-  For instance:
-    events.On("test", func() {}).On("test2", func() {}).Emit("test").Clear("test")
+For instance:
+  events.On("test", func() {}).On("test2", func() {}).Emit("test").Clear("test")
 
-  Returns the list of events for chaining commands.
+Returns the list of events for chaining commands.
 
 */
 func (e Events) Clear(name ...string) Events {
@@ -92,23 +92,23 @@ func (e Events) Clear(name ...string) Events {
 
 /*
 
-  Emit an event. Arguments are optional. Each event will be ran as a Series.
+Emit an event. Arguments are optional. Each event will be ran as a Series.
 
-  For example:
-    events := make(async.Events)
-    events.On("myevent", func() {
-      println("Emitted myevent")
-    })
-    events.Emit("myevent")
+For example:
+  events := make(async.Events)
+  events.On("myevent", func() {
+    println("Emitted myevent")
+  })
+  events.Emit("myevent")
 
-  With arguments:
-    events := make(async.Events)
-    events.On("myevent", func(msg string) {
-      fmt.Printf("Message: %s\n", msg)
-    })
-    events.Emit("myevent", "Testing")
+With arguments:
+  events := make(async.Events)
+  events.On("myevent", func(msg string) {
+    fmt.Printf("Message: %s\n", msg)
+  })
+  events.Emit("myevent", "Testing")
 
-  Returns the list of events for chaining commands.
+Returns the list of events for chaining commands.
 
 */
 func (e Events) Emit(name string, args ...interface{}) Events {
@@ -179,12 +179,12 @@ func (e Events) Emit(name string, args ...interface{}) Events {
 
 /*
 
-  Get Event map of functions and frequencies for the named event. This is just
-  a convenience function. This data could also be accessed by the normal
-  mapping methods.
+Get Event map of functions and frequencies for the named event. This is just
+a convenience function. This data could also be accessed by the normal
+mapping methods.
 
-  For instance:
-    fmt.Printf("Events for myevent: %+v\n", e["myevent"])
+For instance:
+  fmt.Printf("Events for myevent: %+v\n", e["myevent"])
 
 */
 func (e Events) Get(name string) Event {
@@ -193,12 +193,12 @@ func (e Events) Get(name string) Event {
 
 /*
 
-  Get length of the Event map of functions and frequencies for the named
-  event. This is just a convenience function. This data could also be accessed
-  by the normal mapping methods.
+Length gets the length of the Event map of functions and frequencies for the
+named event. This is just a convenience function. This data could also be
+accessed by the normal mapping methods.
 
-  For instance:
-    fmt.Printf("Length: %d", len(e["myevent"]))
+For instance:
+  fmt.Printf("Length: %d", len(e["myevent"]))
 
 */
 func (e Events) Length(name string) int {
@@ -207,12 +207,12 @@ func (e Events) Length(name string) int {
 
 /*
 
-  Add an event to be called forever.
+On adds an event to be called forever.
 
-  This is equal to calling Times with -1 as the number of times to run the
-  event. More documentation can be found on the Times function.
+This is equal to calling Times with -1 as the number of times to run the
+event. More documentation can be found on the Times function.
 
-  Returns the list of events for chaining commands.
+Returns the list of events for chaining commands.
 
 */
 func (e Events) On(name string, callbacks ...interface{}) Events {
@@ -221,12 +221,12 @@ func (e Events) On(name string, callbacks ...interface{}) Events {
 
 /*
 
-  Add an event to be called once.
+Once adds an event to be called only once.
 
-  This is equal to calling Times with 1 as the number of times to run the
-  event. More documentation can be found on the Times function.
+This is equal to calling Times with 1 as the number of times to run the
+event. More documentation can be found on the Times function.
 
-  Returns the list of events for chaining commands.
+Returns the list of events for chaining commands.
 
 */
 func (e Events) Once(name string, callbacks ...interface{}) Events {
@@ -235,10 +235,10 @@ func (e Events) Once(name string, callbacks ...interface{}) Events {
 
 /*
 
-  Add an event to be called a number of times. If the number of times for the
-  function to be called is -1, it will be called until the list is cleared.
+Times adds an event to be called a number of times. If the number of times for
+the function to be called is -1, it will be called until the list is cleared.
 
-  Returns the list of events for chaining commands.
+Returns the list of events for chaining commands.
 
 */
 func (e Events) Times(name string, times int, callbacks ...interface{}) Events {
