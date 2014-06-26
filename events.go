@@ -39,7 +39,7 @@ type Event map[reflect.Value]int
 
   It's also easily inheritable by other structures. For example:
     type MyStruct struct {
-      Events
+      async.Events
     }
 
     m := MyStruct{make(async.Events)}
