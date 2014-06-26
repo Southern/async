@@ -2,8 +2,8 @@ package async
 
 /*
 
-Parallel is shorthand function to List.RunParallel without having to manually
-create a new list, add the routines, etc.
+Parallel is a shorthand function to List.RunParallel without having to
+manually create a new list, add the routines, etc.
 
 */
 func Parallel(routines []Routine, callbacks ...Done) {
