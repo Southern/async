@@ -7,10 +7,10 @@ create a new list, add the routines, etc.
 
 */
 func Series(routines []Routine, callbacks ...Done) {
-  l := New()
-  l.Multiple(routines...)
+	l := New()
+	l.Multiple(routines...)
 
-  l.RunSeries(callbacks...)
+	l.RunSeries(callbacks...)
 }
 
 /*
@@ -20,10 +20,10 @@ having to manually create a new list, add the routines, etc.
 
 */
 func SeriesParallel(routines []Routine, callbacks ...Done) {
-  l := New()
-  l.Multiple(routines...)
+	l := New()
+	l.Multiple(routines...)
 
-  l.RunSeriesParallel(callbacks...)
+	l.RunSeriesParallel(callbacks...)
 }
 
 /*
@@ -80,12 +80,12 @@ For example, take a look at one of the tests for this function:
 
 */
 func (l *List) RunSeries(callbacks ...Done) {
-  fall := fallSeries(l, callbacks...)
-  next := nextSeries(l, callbacks...)
+	fall := fallSeries(l, callbacks...)
+	next := nextSeries(l, callbacks...)
 
-  l.Wait.Add(l.Len())
+	l.Wait.Add(l.Len())
 
-  fall(next)
+	fall(next)
 }
 
 /*
@@ -146,63 +146,63 @@ For example, take a look at one of the tests for this function:
 
 */
 func (l *List) RunSeriesParallel(callbacks ...Done) {
-  var routines []Routine
+	var routines []Routine
 
-  for l.Len() > 0 {
-    e := l.Front()
-    _, r := l.Remove(e)
+	for l.Len() > 0 {
+		e := l.Front()
+		_, r := l.Remove(e)
 
-    routines = append(routines, func(routine Routine) Routine {
-      return func(done Done, args ...interface{}) {
-        r(func(err error, args ...interface{}) {
-          // As with our normal RunSeries, we do not want to handle any args
-          // that are returned. We only want to return if an error occurred.
-          done(err)
-        })
-      }
-    }(r))
-  }
+		routines = append(routines, func(routine Routine) Routine {
+			return func(done Done, args ...interface{}) {
+				r(func(err error, args ...interface{}) {
+					// As with our normal RunSeries, we do not want to handle any args
+					// that are returned. We only want to return if an error occurred.
+					done(err)
+				})
+			}
+		}(r))
+	}
 
-  l.Wait.Add(l.Len())
+	l.Wait.Add(l.Len())
 
-  Parallel(routines, callbacks...)
+	Parallel(routines, callbacks...)
 }
 
 func fallSeries(l *List, callbacks ...Done) func(Done, ...interface{}) {
-  return func(next Done, args ...interface{}) {
-    e := l.Front()
-    _, r := l.Remove(e)
+	return func(next Done, args ...interface{}) {
+		e := l.Front()
+		_, r := l.Remove(e)
 
-    // Run the first series routine and give it the next function, and
-    // any arguments that were provided
-    go r(next)
-    l.Wait.Wait()
-  }
+		// Run the first series routine and give it the next function, and
+		// any arguments that were provided
+		go r(next)
+		l.Wait.Wait()
+	}
 }
 
 func nextSeries(l *List, callbacks ...Done) Done {
-  fall := fallSeries(l, callbacks...)
+	fall := fallSeries(l, callbacks...)
 
-  return func(err error, args ...interface{}) {
-    next := nextSeries(l, callbacks...)
+	return func(err error, args ...interface{}) {
+		next := nextSeries(l, callbacks...)
 
-    l.Wait.Done()
-    if err != nil || l.Len() == 0 {
-      // Just in case it's an error, let's make sure we've cleared
-      // all of the sync.WaitGroup waits that we initiated.
-      for i := 0; i < l.Len(); i++ {
-        l.Wait.Done()
-      }
+		l.Wait.Done()
+		if err != nil || l.Len() == 0 {
+			// Just in case it's an error, let's make sure we've cleared
+			// all of the sync.WaitGroup waits that we initiated.
+			for i := 0; i < l.Len(); i++ {
+				l.Wait.Done()
+			}
 
-      // Send the results to the callbacks
-      for i := 0; i < len(callbacks); i++ {
-        callbacks[i](err)
-      }
-      return
-    }
+			// Send the results to the callbacks
+			for i := 0; i < len(callbacks); i++ {
+				callbacks[i](err)
+			}
+			return
+		}
 
-    // Run the next series routine with any arguments that were provided
-    fall(next)
-    return
-  }
+		// Run the next series routine with any arguments that were provided
+		fall(next)
+		return
+	}
 }

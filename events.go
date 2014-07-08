@@ -1,7 +1,7 @@
 package async
 
 import (
-  "reflect"
+	"reflect"
 )
 
 /*
@@ -77,17 +77,17 @@ Returns the list of events for chaining commands.
 
 */
 func (e Events) Clear(name ...string) Events {
-  if name != nil {
-    for i := 0; i < len(name); i++ {
-      delete(e, name[i])
-    }
-    return e
-  }
+	if name != nil {
+		for i := 0; i < len(name); i++ {
+			delete(e, name[i])
+		}
+		return e
+	}
 
-  for key := range e {
-    delete(e, key)
-  }
-  return e
+	for key := range e {
+		delete(e, key)
+	}
+	return e
 }
 
 /*
@@ -112,69 +112,69 @@ Returns the list of events for chaining commands.
 
 */
 func (e Events) Emit(name string, args ...interface{}) Events {
-  var (
-    routines = make([]Routine, 0)
-    values   = make([]reflect.Value, 0)
-  )
+	var (
+		routines = make([]Routine, 0)
+		values   = make([]reflect.Value, 0)
+	)
 
-  // If we don't have any events with this name, simply return.
-  if e.Get(name) == nil {
-    return e
-  }
+	// If we don't have any events with this name, simply return.
+	if e.Get(name) == nil {
+		return e
+	}
 
-  // Reflect all of our arguments for the reflect.Value.Call
-  for i := 0; i < len(args); i++ {
-    values = append(values, reflect.ValueOf(args[i]))
-  }
+	// Reflect all of our arguments for the reflect.Value.Call
+	for i := 0; i < len(args); i++ {
+		values = append(values, reflect.ValueOf(args[i]))
+	}
 
-  for fn, freq := range e[name] {
-    // Decrease frequency
-    if freq > 0 {
-      freq--
-    }
+	for fn, freq := range e[name] {
+		// Decrease frequency
+		if freq > 0 {
+			freq--
+		}
 
-    // If the frequency is down to 0, remove the callback from the event
-    // so that it isn't triggered again.
-    if freq == 0 {
-      delete(e[name], fn)
-    } else {
-      e[name][fn] = freq
-    }
+		// If the frequency is down to 0, remove the callback from the event
+		// so that it isn't triggered again.
+		if freq == 0 {
+			delete(e[name], fn)
+		} else {
+			e[name][fn] = freq
+		}
 
-    // Delete the entire event if all callbacks have been triggered
-    if len(e[name]) == 0 {
-      delete(e, name)
-    }
+		// Delete the entire event if all callbacks have been triggered
+		if len(e[name]) == 0 {
+			delete(e, name)
+		}
 
-    // Create the routines to pass into Series
-    routines = append(routines,
-      func(e Events, fn reflect.Value, values []reflect.Value) Routine {
-        return func(done Done, args ...interface{}) {
-          values := fn.Call(values)
-          for i := 0; i < len(values); i++ {
-            v := values[i].Interface()
-            switch v.(type) {
-            case error:
-              done(v.(error))
-              return
-            }
-          }
-          done(nil)
-        }
-      }(e, fn, values),
-    )
-  }
+		// Create the routines to pass into Series
+		routines = append(routines,
+			func(e Events, fn reflect.Value, values []reflect.Value) Routine {
+				return func(done Done, args ...interface{}) {
+					values := fn.Call(values)
+					for i := 0; i < len(values); i++ {
+						v := values[i].Interface()
+						switch v.(type) {
+						case error:
+							done(v.(error))
+							return
+						}
+					}
+					done(nil)
+				}
+			}(e, fn, values),
+		)
+	}
 
-  // Run all of the events in Series
-  Series(routines, func(err error, args ...interface{}) {
-    // Only emit the error event if an error was detected. Nothing else needs
-    // to be done here.
-    if err != nil {
-      e.Emit("error", err)
-    }
-  })
+	// Run all of the events in Series
+	Series(routines, func(err error, args ...interface{}) {
+		// Only emit the error event if an error was detected. Nothing else needs
+		// to be done here.
+		if err != nil {
+			e.Emit("error", err)
+		}
+	})
 
-  return e
+	return e
 }
 
 /*
@@ -188,7 +188,7 @@ For instance:
 
 */
 func (e Events) Get(name string) Event {
-  return e[name]
+	return e[name]
 }
 
 /*
@@ -202,7 +202,7 @@ For instance:
 
 */
 func (e Events) Length(name string) int {
-  return len(e.Get(name))
+	return len(e.Get(name))
 }
 
 /*
@@ -216,7 +216,7 @@ Returns the list of events for chaining commands.
 
 */
 func (e Events) On(name string, callbacks ...interface{}) Events {
-  return e.Times(name, -1, callbacks...)
+	return e.Times(name, -1, callbacks...)
 }
 
 /*
@@ -230,7 +230,7 @@ Returns the list of events for chaining commands.
 
 */
 func (e Events) Once(name string, callbacks ...interface{}) Events {
-  return e.Times(name, 1, callbacks...)
+	return e.Times(name, 1, callbacks...)
 }
 
 /*
@@ -242,18 +242,18 @@ Returns the list of events for chaining commands.
 
 */
 func (e Events) Times(name string, times int, callbacks ...interface{}) Events {
-  // Check to see if the event already exists. If not, create its map.
-  if e[name] == nil {
-    e[name] = make(Event)
-  }
+	// Check to see if the event already exists. If not, create its map.
+	if e[name] == nil {
+		e[name] = make(Event)
+	}
 
-  for i := 0; i < len(callbacks); i++ {
-    // Reflect the function so that we don't have to add function restraints.
-    fn := reflect.ValueOf(callbacks[i])
+	for i := 0; i < len(callbacks); i++ {
+		// Reflect the function so that we don't have to add function restraints.
+		fn := reflect.ValueOf(callbacks[i])
 
-    // Set the number of times that the event should run.
-    e[name][fn] = times
-  }
+		// Set the number of times that the event should run.
+		e[name][fn] = times
+	}
 
-  return e
+	return e
 }

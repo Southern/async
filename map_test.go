@@ -1,196 +1,196 @@
 package async_test
 
 import (
-  "github.com/Southern/async"
-  "testing"
+	"github.com/Southern/async"
+	"testing"
 )
 
 func TestMapString(t *testing.T) {
-  str := []string{
-    "test",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-  }
+	str := []string{
+		"test",
+		"test2",
+		"test3",
+		"test4",
+		"test5",
+	}
 
-  expects := []string{
-    "test1",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-  }
+	expects := []string{
+		"test1",
+		"test2",
+		"test3",
+		"test4",
+		"test5",
+	}
 
-  mapper := func(done async.Done, args ...interface{}) {
-    Status("Hit string")
-    Status("Args: %+v\n", args)
-    if args[1] == 0 {
-      done(nil, "test1")
-      return
-    }
-    done(nil, args[0])
-  }
+	mapper := func(done async.Done, args ...interface{}) {
+		Status("Hit string")
+		Status("Args: %+v\n", args)
+		if args[1] == 0 {
+			done(nil, "test1")
+			return
+		}
+		done(nil, args[0])
+	}
 
-  final := func(err error, results ...interface{}) {
-    Status("Hit string end")
-    Status("Results: %+v\n", results)
-    for i := 0; i < len(results); i++ {
-      if results[i] != expects[i] {
-        t.Errorf("Did not map correctly.")
-        break
-      }
-    }
-  }
+	final := func(err error, results ...interface{}) {
+		Status("Hit string end")
+		Status("Results: %+v\n", results)
+		for i := 0; i < len(results); i++ {
+			if results[i] != expects[i] {
+				t.Errorf("Did not map correctly.")
+				break
+			}
+		}
+	}
 
-  async.Map(str, mapper, final)
+	async.Map(str, mapper, final)
 }
 
 func TestMapInt(t *testing.T) {
-  ints := []int{1, 2, 3, 4, 5}
+	ints := []int{1, 2, 3, 4, 5}
 
-  expects := []int{2, 4, 6, 8, 10}
+	expects := []int{2, 4, 6, 8, 10}
 
-  mapper := func(done async.Done, args ...interface{}) {
-    Status("Hit int")
-    Status("Args: %+v\n", args)
-    done(nil, args[0].(int)*2)
-  }
+	mapper := func(done async.Done, args ...interface{}) {
+		Status("Hit int")
+		Status("Args: %+v\n", args)
+		done(nil, args[0].(int)*2)
+	}
 
-  final := func(err error, results ...interface{}) {
-    Status("Hit int end")
-    Status("Results: %+v\n", results)
-    for i := 0; i < len(results); i++ {
-      if results[i] != expects[i] {
-        t.Errorf("Did not map correctly.")
-        break
-      }
-    }
-  }
+	final := func(err error, results ...interface{}) {
+		Status("Hit int end")
+		Status("Results: %+v\n", results)
+		for i := 0; i < len(results); i++ {
+			if results[i] != expects[i] {
+				t.Errorf("Did not map correctly.")
+				break
+			}
+		}
+	}
 
-  async.Map(ints, mapper, final)
+	async.Map(ints, mapper, final)
 }
 
 func TestMapBool(t *testing.T) {
-  bools := []bool{true, false, false, true, false}
+	bools := []bool{true, false, false, true, false}
 
-  expects := []bool{true, true, false, true, false}
+	expects := []bool{true, true, false, true, false}
 
-  mapper := func(done async.Done, args ...interface{}) {
-    Status("Hit bool")
-    Status("Args: %+v\n", args)
-    if args[1] == 1 {
-      done(nil, true)
-      return
-    }
-    done(nil, args[0])
-  }
+	mapper := func(done async.Done, args ...interface{}) {
+		Status("Hit bool")
+		Status("Args: %+v\n", args)
+		if args[1] == 1 {
+			done(nil, true)
+			return
+		}
+		done(nil, args[0])
+	}
 
-  final := func(err error, results ...interface{}) {
-    Status("Hit bool end")
-    Status("Results: %+v\n", results)
-    for i := 0; i < len(results); i++ {
-      if results[i] != expects[i] {
-        t.Errorf("Did not map correctly.")
-        break
-      }
-    }
-  }
+	final := func(err error, results ...interface{}) {
+		Status("Hit bool end")
+		Status("Results: %+v\n", results)
+		for i := 0; i < len(results); i++ {
+			if results[i] != expects[i] {
+				t.Errorf("Did not map correctly.")
+				break
+			}
+		}
+	}
 
-  async.Map(bools, mapper, final)
+	async.Map(bools, mapper, final)
 }
 
 func TestMapStringParallel(t *testing.T) {
-  str := []string{
-    "test",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-  }
+	str := []string{
+		"test",
+		"test2",
+		"test3",
+		"test4",
+		"test5",
+	}
 
-  expects := []string{
-    "test1",
-    "test2",
-    "test3",
-    "test4",
-    "test5",
-  }
+	expects := []string{
+		"test1",
+		"test2",
+		"test3",
+		"test4",
+		"test5",
+	}
 
-  mapper := func(done async.Done, args ...interface{}) {
-    Status("Hit string")
-    Status("Args: %+v\n", args)
-    if args[1] == 0 {
-      done(nil, "test1")
-      return
-    }
-    done(nil, args[0])
-  }
+	mapper := func(done async.Done, args ...interface{}) {
+		Status("Hit string")
+		Status("Args: %+v\n", args)
+		if args[1] == 0 {
+			done(nil, "test1")
+			return
+		}
+		done(nil, args[0])
+	}
 
-  final := func(err error, results ...interface{}) {
-    Status("Hit string end")
-    Status("Results: %+v\n", results)
-    for i := 0; i < len(results); i++ {
-      if results[i] != expects[i] {
-        t.Errorf("Did not map correctly.")
-        break
-      }
-    }
-  }
+	final := func(err error, results ...interface{}) {
+		Status("Hit string end")
+		Status("Results: %+v\n", results)
+		for i := 0; i < len(results); i++ {
+			if results[i] != expects[i] {
+				t.Errorf("Did not map correctly.")
+				break
+			}
+		}
+	}
 
-  async.MapParallel(str, mapper, final)
+	async.MapParallel(str, mapper, final)
 }
 
 func TestMapIntParallel(t *testing.T) {
-  ints := []int{1, 2, 3, 4, 5}
+	ints := []int{1, 2, 3, 4, 5}
 
-  expects := []int{2, 4, 6, 8, 10}
+	expects := []int{2, 4, 6, 8, 10}
 
-  mapper := func(done async.Done, args ...interface{}) {
-    Status("Hit int")
-    Status("Args: %+v\n", args)
-    done(nil, args[0].(int)*2)
-  }
+	mapper := func(done async.Done, args ...interface{}) {
+		Status("Hit int")
+		Status("Args: %+v\n", args)
+		done(nil, args[0].(int)*2)
+	}
 
-  final := func(err error, results ...interface{}) {
-    Status("Hit int end")
-    Status("Results: %+v\n", results)
-    for i := 0; i < len(results); i++ {
-      if results[i] != expects[i] {
-        t.Errorf("Did not map correctly.")
-        break
-      }
-    }
-  }
+	final := func(err error, results ...interface{}) {
+		Status("Hit int end")
+		Status("Results: %+v\n", results)
+		for i := 0; i < len(results); i++ {
+			if results[i] != expects[i] {
+				t.Errorf("Did not map correctly.")
+				break
+			}
+		}
+	}
 
-  async.MapParallel(ints, mapper, final)
+	async.MapParallel(ints, mapper, final)
 }
 
 func TestMapBoolParallel(t *testing.T) {
-  bools := []bool{true, false, false, true, false}
+	bools := []bool{true, false, false, true, false}
 
-  expects := []bool{true, true, false, true, false}
+	expects := []bool{true, true, false, true, false}
 
-  mapper := func(done async.Done, args ...interface{}) {
-    Status("Hit bool")
-    Status("Args: %+v\n", args)
-    if args[1] == 1 {
-      done(nil, true)
-      return
-    }
-    done(nil, args[0])
-  }
+	mapper := func(done async.Done, args ...interface{}) {
+		Status("Hit bool")
+		Status("Args: %+v\n", args)
+		if args[1] == 1 {
+			done(nil, true)
+			return
+		}
+		done(nil, args[0])
+	}
 
-  final := func(err error, results ...interface{}) {
-    Status("Hit bool end")
-    Status("Results: %+v\n", results)
-    for i := 0; i < len(results); i++ {
-      if results[i] != expects[i] {
-        t.Errorf("Did not map correctly.")
-        break
-      }
-    }
-  }
+	final := func(err error, results ...interface{}) {
+		Status("Hit bool end")
+		Status("Results: %+v\n", results)
+		for i := 0; i < len(results); i++ {
+			if results[i] != expects[i] {
+				t.Errorf("Did not map correctly.")
+				break
+			}
+		}
+	}
 
-  async.MapParallel(bools, mapper, final)
+	async.MapParallel(bools, mapper, final)
 }

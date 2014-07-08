@@ -1,7 +1,7 @@
 package async
 
 import (
-  "reflect"
+	"reflect"
 )
 
 /*
@@ -59,36 +59,36 @@ slice for its arguments.
 
 */
 func Filter(data interface{}, routine Routine, callbacks ...Done) {
-  var (
-    routines []Routine
-    results  []interface{}
-  )
+	var (
+		routines []Routine
+		results  []interface{}
+	)
 
-  d := reflect.ValueOf(data)
+	d := reflect.ValueOf(data)
 
-  for i := 0; i < d.Len(); i++ {
-    v := d.Index(i).Interface()
-    routines = append(routines, func(id int) Routine {
-      return func(done Done, args ...interface{}) {
-        done = func(original Done) Done {
-          return func(err error, args ...interface{}) {
-            if args[0] != false {
-              results = append(results, v)
-            }
-            if id == (d.Len() - 1) {
-              original(err, results...)
-              return
-            }
-            original(err, args...)
-          }
-        }(done)
+	for i := 0; i < d.Len(); i++ {
+		v := d.Index(i).Interface()
+		routines = append(routines, func(id int) Routine {
+			return func(done Done, args ...interface{}) {
+				done = func(original Done) Done {
+					return func(err error, args ...interface{}) {
+						if args[0] != false {
+							results = append(results, v)
+						}
+						if id == (d.Len() - 1) {
+							original(err, results...)
+							return
+						}
+						original(err, args...)
+					}
+				}(done)
 
-        routine(done, v, id)
-      }
-    }(i))
-  }
+				routine(done, v, id)
+			}
+		}(i))
+	}
 
-  Waterfall(routines, callbacks...)
+	Waterfall(routines, callbacks...)
 }
 
 /*
@@ -157,28 +157,28 @@ use Filter instead to ensure it stays in order.
 
 */
 func FilterParallel(data interface{}, routine Routine, callbacks ...Done) {
-  var routines []Routine
+	var routines []Routine
 
-  d := reflect.ValueOf(data)
+	d := reflect.ValueOf(data)
 
-  for i := 0; i < d.Len(); i++ {
-    v := d.Index(i).Interface()
-    routines = append(routines, func(id int) Routine {
-      return func(done Done, args ...interface{}) {
-        done = func(original Done) Done {
-          return func(err error, args ...interface{}) {
-            if args[0] != false {
-              original(err, v)
-              return
-            }
-            original(err)
-          }
-        }(done)
+	for i := 0; i < d.Len(); i++ {
+		v := d.Index(i).Interface()
+		routines = append(routines, func(id int) Routine {
+			return func(done Done, args ...interface{}) {
+				done = func(original Done) Done {
+					return func(err error, args ...interface{}) {
+						if args[0] != false {
+							original(err, v)
+							return
+						}
+						original(err)
+					}
+				}(done)
 
-        routine(done, v, id)
-      }
-    }(i))
-  }
+				routine(done, v, id)
+			}
+		}(i))
+	}
 
-  Parallel(routines, callbacks...)
+	Parallel(routines, callbacks...)
 }

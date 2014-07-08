@@ -1,7 +1,7 @@
 package async
 
 import (
-  "reflect"
+	"reflect"
 )
 
 /*
@@ -41,34 +41,34 @@ For example, take a look at one of the tests for this function:
 
 */
 func Map(data interface{}, routine Routine, callbacks ...Done) {
-  var (
-    routines []Routine
-    results  []interface{}
-  )
+	var (
+		routines []Routine
+		results  []interface{}
+	)
 
-  d := reflect.ValueOf(data)
+	d := reflect.ValueOf(data)
 
-  for i := 0; i < d.Len(); i++ {
-    v := d.Index(i).Interface()
-    routines = append(routines, func(id int) Routine {
-      return func(done Done, args ...interface{}) {
-        done = func(original Done) Done {
-          return func(err error, args ...interface{}) {
-            results = append(results, args...)
-            if id == (d.Len() - 1) {
-              original(err, results...)
-              return
-            }
-            original(err, args...)
-          }
-        }(done)
+	for i := 0; i < d.Len(); i++ {
+		v := d.Index(i).Interface()
+		routines = append(routines, func(id int) Routine {
+			return func(done Done, args ...interface{}) {
+				done = func(original Done) Done {
+					return func(err error, args ...interface{}) {
+						results = append(results, args...)
+						if id == (d.Len() - 1) {
+							original(err, results...)
+							return
+						}
+						original(err, args...)
+					}
+				}(done)
 
-        routine(done, v, id)
-      }
-    }(i))
-  }
+				routine(done, v, id)
+			}
+		}(i))
+	}
 
-  Waterfall(routines, callbacks...)
+	Waterfall(routines, callbacks...)
 }
 
 /*
@@ -134,18 +134,18 @@ Map instead to ensure it stays in order.
 
 */
 func MapParallel(data interface{}, routine Routine, callbacks ...Done) {
-  var routines []Routine
+	var routines []Routine
 
-  d := reflect.ValueOf(data)
+	d := reflect.ValueOf(data)
 
-  for i := 0; i < d.Len(); i++ {
-    v := d.Index(i).Interface()
-    routines = append(routines, func(id int) Routine {
-      return func(done Done, args ...interface{}) {
-        routine(done, v, id)
-      }
-    }(i))
-  }
+	for i := 0; i < d.Len(); i++ {
+		v := d.Index(i).Interface()
+		routines = append(routines, func(id int) Routine {
+			return func(done Done, args ...interface{}) {
+				routine(done, v, id)
+			}
+		}(i))
+	}
 
-  Parallel(routines, callbacks...)
+	Parallel(routines, callbacks...)
 }

@@ -7,10 +7,10 @@ manually create a new list, add the routines, etc.
 
 */
 func Parallel(routines []Routine, callbacks ...Done) {
-  l := New()
-  l.Multiple(routines...)
+	l := New()
+	l.Multiple(routines...)
 
-  l.RunParallel(callbacks...)
+	l.RunParallel(callbacks...)
 }
 
 /*
@@ -52,66 +52,66 @@ since an error has already occurred.
 
 */
 func (l *List) RunParallel(callbacks ...Done) {
-  var (
-    results = make([]interface{}, 0)
+	var (
+		results = make([]interface{}, 0)
 
-    result = make(chan interface{})
+		result = make(chan interface{})
 
-    _error error
+		_error error
 
-    final = func(err error, results ...interface{}) {
-      for i := 0; i < len(callbacks); i++ {
-        if err != nil {
-          callbacks[i](err)
-        } else {
-          callbacks[i](err, results...)
-        }
-      }
-    }
-  )
+		final = func(err error, results ...interface{}) {
+			for i := 0; i < len(callbacks); i++ {
+				if err != nil {
+					callbacks[i](err)
+				} else {
+					callbacks[i](err, results...)
+				}
+			}
+		}
+	)
 
-  defer close(result)
+	defer close(result)
 
-  l.Wait.Add(l.Len())
+	l.Wait.Add(l.Len())
 
-  go func() {
-    for {
-      r := <-result
+	go func() {
+		for {
+			r := <-result
 
-      if _error != nil {
-        continue
-      }
+			if _error != nil {
+				continue
+			}
 
-      switch r.(type) {
-      case error:
-        _error = r.(error)
-        final(_error)
+			switch r.(type) {
+			case error:
+				_error = r.(error)
+				final(_error)
 
-      case []interface{}:
-        results = append(results, r.([]interface{})...)
-      }
-    }
-  }()
+			case []interface{}:
+				results = append(results, r.([]interface{})...)
+			}
+		}
+	}()
 
-  for l.Len() > 0 {
-    e := l.Front()
-    _, r := l.Remove(e)
+	for l.Len() > 0 {
+		e := l.Front()
+		_, r := l.Remove(e)
 
-    go r(func(err error, args ...interface{}) {
-      defer l.Wait.Done()
+		go r(func(err error, args ...interface{}) {
+			defer l.Wait.Done()
 
-      if err != nil {
-        result <- err
-        return
-      }
+			if err != nil {
+				result <- err
+				return
+			}
 
-      result <- args
-    })
-  }
+			result <- args
+		})
+	}
 
-  l.Wait.Wait()
+	l.Wait.Wait()
 
-  if _error == nil {
-    final(nil, results...)
-  }
+	if _error == nil {
+		final(nil, results...)
+	}
 }

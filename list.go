@@ -1,8 +1,8 @@
 package async
 
 import (
-  "container/list"
-  "sync"
+	"container/list"
+	"sync"
 )
 
 /*
@@ -17,36 +17,36 @@ therefore isn't able to be called again.
 
 */
 type List struct {
-  *list.List
+	*list.List
 
-  Wait sync.WaitGroup
+	Wait sync.WaitGroup
 }
 
 // New will create a new List instance
 func New() *List {
-  return &List{
-    List: list.New(),
-  }
+	return &List{
+		List: list.New(),
+	}
 }
 
 // Add will add a single Routine function to the current list
 func (l *List) Add(routine Routine) (*List, *list.Element) {
-  element := l.PushBack(routine)
-  return l, element
+	element := l.PushBack(routine)
+	return l, element
 }
 
 // Multiple will add multiple Routine functions to the current list
 func (l *List) Multiple(routines ...Routine) (*List, []*list.Element) {
-  var (
-    elements = make([]*list.Element, 0)
-  )
+	var (
+		elements = make([]*list.Element, 0)
+	)
 
-  for i := 0; i < len(routines); i++ {
-    _, e := l.Add(routines[i])
-    elements = append(elements, e)
-  }
+	for i := 0; i < len(routines); i++ {
+		_, e := l.Add(routines[i])
+		elements = append(elements, e)
+	}
 
-  return l, elements
+	return l, elements
 }
 
 /*
@@ -58,6 +58,6 @@ An example of removing a Routine would be:
 
 */
 func (l *List) Remove(element *list.Element) (*List, Routine) {
-  routine := l.List.Remove(element).(Routine)
-  return l, routine
+	routine := l.List.Remove(element).(Routine)
+	return l, routine
 }
